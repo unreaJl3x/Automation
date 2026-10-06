@@ -6,7 +6,9 @@ import com.vaadin.flow.component.splitlayout.SplitLayout;
 import ru.keich.mon.automation.schedule.ScheduleService;
 import ru.keich.mon.automation.script.Script;
 import ru.keich.mon.automation.script.ScriptService;
+import ru.keich.mon.automation.script.version.ScriptVersion;
 import ru.keich.mon.automation.script.version.ScriptVersionDataProvider;
+import ru.keich.mon.automation.script.version.ScriptVersionId;
 import ru.keich.mon.automation.script.version.ScriptVersionService;
 import ru.keich.mon.automation.scripting.ScriptCallBack;
 
@@ -34,6 +36,7 @@ public class ScriptsEdit extends Div {
 
 	private final ScriptsEditLeft left;
 	private final ScriptsEditRight right;
+	private final ScriptVersionService scriptVersionService;
 
 	private final ScriptService scriptService;
 	private final ScheduleService scheduleService;
@@ -44,6 +47,7 @@ public class ScriptsEdit extends Div {
 
 		this.scheduleService = scheduleService;
 		this.scriptService = scriptService;
+		this.scriptVersionService = scriptVersionService;
 
 		this.setSizeFull();
 		this.setHeightFull();
@@ -64,6 +68,8 @@ public class ScriptsEdit extends Div {
 
 	private void save(Script script) {
 		scriptService.save(script);
+		ScriptVersion v = new ScriptVersion(new ScriptVersionId(script.getName(),script.getVersion()+1));
+		scriptVersionService.save(v);
 		left.refresh();
 	}
 

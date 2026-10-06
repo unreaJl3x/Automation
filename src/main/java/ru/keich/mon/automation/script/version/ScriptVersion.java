@@ -8,6 +8,8 @@ import jakarta.persistence.Table;
 import jakarta.persistence.EmbeddedId;
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ScriptVersion {
 	@EmbeddedId
 	private ScriptVersionId id;

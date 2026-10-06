@@ -46,21 +46,21 @@ public class ScriptsEditLeft extends VerticalLayout {
 		grid.addHierarchyColumn(Script::getName);
 		grid.addColumn(new ComponentRenderer(i->{
 			ComboBox versions = new ComboBox();
-			versions.setWidth("50%");
+			
 			versions.getElement().setProperty("allowedCharPattern","[0-9]");
 			
 			var dataVersionProviderOverride = dataVersionProvider.withConvertedFilter(
 					(filter) -> {
 						Map<String,String> map = new HashMap<>();
 						//debug
-						map.put("field","wqe");
+						map.put("field","qwe");
 						//debug
 						map.put("version",filter.toString());
 						System.out.println(map.toString());
 						return map.toString();
 					}
 			);
-			//versions.setItems(dataVersionProviderOverride);
+			versions.setItems(dataVersionProviderOverride);
 			return versions;
 		}));
 		grid.setDataProvider(dataProvider);

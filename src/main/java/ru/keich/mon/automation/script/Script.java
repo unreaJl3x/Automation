@@ -51,7 +51,7 @@ public class Script implements Serializable {
 	private String parent;
 	
 	@Column(name="version",nullable=false)
-	@ColumnDefault("1")
+	@ColumnDefault("0")
 	private int version;
 	
 	@ManyToOne()

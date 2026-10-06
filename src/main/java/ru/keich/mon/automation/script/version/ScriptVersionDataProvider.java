@@ -16,11 +16,15 @@ public class ScriptVersionDataProvider extends AbstractBackEndDataProvider<Integ
 	
 	@Override
 	protected Stream<Integer> fetchFromBackEnd(Query<Integer, String> q) {
-		return this._service.getAllVersionByScriptName(q).orElseThrow().stream();
+		System.out.println("enter dataprovider");
+		var r = this._service.getAllVersionByScriptName(q).get();
+		System.out.println(r.size());
+		return r.stream();
 	}
 
 	@Override
 	protected int sizeInBackEnd(Query<Integer, String> query) {
+		System.out.println("Enter size dataprovider");
 		return this._service.getAllVersionCountByScriptName(query);
 	}
 
