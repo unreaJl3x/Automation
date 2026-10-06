@@ -44,17 +44,13 @@ public class ScriptsEditLeft extends VerticalLayout {
 		grid = new TreeGrid<Script>();
 		grid.addItemClickListener(e -> open.accept(e.getItem()));
 		grid.addHierarchyColumn(Script::getName);
-		grid.addColumn(new ComponentRenderer(i->{
+		grid.addComponentColumn(i->{
 			ComboBox versions = new ComboBox();
-			
 			versions.getElement().setProperty("allowedCharPattern","[0-9]");
-			
 			var dataVersionProviderOverride = dataVersionProvider.withConvertedFilter(
 					(filter) -> {
 						Map<String,String> map = new HashMap<>();
-						//debug
-						map.put("field","qwe");
-						//debug
+						map.put("field",i.getName());
 						map.put("version",filter.toString());
 						System.out.println(map.toString());
 						return map.toString();
@@ -62,7 +58,7 @@ public class ScriptsEditLeft extends VerticalLayout {
 			);
 			versions.setItems(dataVersionProviderOverride);
 			return versions;
-		}));
+		});
 		grid.setDataProvider(dataProvider);
 
 		var plusButton = new Button(new Icon(VaadinIcon.DISC));

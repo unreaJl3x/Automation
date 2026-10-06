@@ -24,12 +24,12 @@ public class ScriptVersionService {
 		Map<String,String> map = new HashMap<>();
 		Queue<String> queue = new LinkedList();
 		
-		queue.addAll(List.of(s.replace("{", "").replace("}","").strip().split(",")));
+		queue.addAll(List.of(s.replace("{", "").replace("}","").trim().split(",")));
 		while (!queue.isEmpty()) {
 			var keyVal = queue.poll().split("=");
-			if (keyVal.length!=2) break;
-			System.out.println(keyVal[0]+" "+ keyVal[1]);
-			map.put(keyVal[0], keyVal[1]);
+			if (keyVal.length>2) break;
+			System.out.println();
+			map.put(keyVal[0], keyVal.length>1?keyVal[1]:"");
 		}
 		return map;
 	}

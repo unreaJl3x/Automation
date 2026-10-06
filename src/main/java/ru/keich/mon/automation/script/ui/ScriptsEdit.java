@@ -69,6 +69,7 @@ public class ScriptsEdit extends Div {
 	private void save(Script script) {
 		scriptService.save(script);
 		ScriptVersion v = new ScriptVersion(new ScriptVersionId(script.getName(),script.getVersion()+1));
+		script.setVersion(script.getVersion()+1);
 		scriptVersionService.save(v);
 		left.refresh();
 	}
