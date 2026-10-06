@@ -2,12 +2,18 @@ package ru.keich.mon.automation.script;
 
 import java.io.Serializable;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinColumns;
+import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.keich.mon.automation.script.version.ScriptVersion;
 
 /*
  * Copyright 2026 the original author or authors.
@@ -43,6 +49,27 @@ public class Script implements Serializable {
 
 	// private Set<String> child = Collections.emptySet();
 	private String parent;
+	
+	@Column(name="version",nullable=false)
+	@ColumnDefault("1")
+	private int version;
+	
+	@ManyToOne()
+	@JoinColumns({
+		@JoinColumn(
+				name="name",
+				referencedColumnName ="name",
+				updatable=false,
+				insertable=false
+		),
+		@JoinColumn(
+				name="version",
+				referencedColumnName="version",
+				updatable=false,
+				insertable=false
+		)
+	})
+	private ScriptVersion scriptVersion;
 
 	@Override
 	public String toString() {

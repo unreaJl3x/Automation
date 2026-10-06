@@ -11,7 +11,10 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.treegrid.TreeGrid;
 
 import ru.keich.mon.automation.script.Script;
+import ru.keich.mon.automation.script.version.ScriptVersionDataProvider;
 
+import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
 /*
  * Copyright 2026 the original author or authors.
  *
@@ -27,6 +30,8 @@ import ru.keich.mon.automation.script.Script;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import java.util.Map;
+import java.util.HashMap;
 
 public class ScriptsEditLeft extends VerticalLayout {
 
@@ -35,13 +40,32 @@ public class ScriptsEditLeft extends VerticalLayout {
 	private final TreeGrid<Script> grid;
 
 	public ScriptsEditLeft(ScriptHierarchicalDataProvider dataProvider, Consumer<Script> open,
-			Supplier<Boolean> addNew) {
+			Supplier<Boolean> addNew, ScriptVersionDataProvider dataVersionProvider) {
 		grid = new TreeGrid<Script>();
 		grid.addItemClickListener(e -> open.accept(e.getItem()));
 		grid.addHierarchyColumn(Script::getName);
+		grid.addColumn(new ComponentRenderer(i->{
+			ComboBox versions = new ComboBox();
+			versions.setWidth("50%");
+			versions.getElement().setProperty("allowedCharPattern","[0-9]");
+			
+			var dataVersionProviderOverride = dataVersionProvider.withConvertedFilter(
+					(filter) -> {
+						Map<String,String> map = new HashMap<>();
+						//debug
+						map.put("field","wqe");
+						//debug
+						map.put("version",filter.toString());
+						System.out.println(map.toString());
+						return map.toString();
+					}
+			);
+			//versions.setItems(dataVersionProviderOverride);
+			return versions;
+		}));
 		grid.setDataProvider(dataProvider);
 
-		var plusButton = new Button(new Icon(VaadinIcon.PLUS));
+		var plusButton = new Button(new Icon(VaadinIcon.DISC));
 		plusButton.addClickListener(e -> addNew.get());
 
 		var buttons = new HorizontalLayout();

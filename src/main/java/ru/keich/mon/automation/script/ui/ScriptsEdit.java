@@ -6,6 +6,8 @@ import com.vaadin.flow.component.splitlayout.SplitLayout;
 import ru.keich.mon.automation.schedule.ScheduleService;
 import ru.keich.mon.automation.script.Script;
 import ru.keich.mon.automation.script.ScriptService;
+import ru.keich.mon.automation.script.version.ScriptVersionDataProvider;
+import ru.keich.mon.automation.script.version.ScriptVersionService;
 import ru.keich.mon.automation.scripting.ScriptCallBack;
 
 /*
@@ -36,7 +38,8 @@ public class ScriptsEdit extends Div {
 	private final ScriptService scriptService;
 	private final ScheduleService scheduleService;
 
-	public ScriptsEdit(ScriptService scriptService, ScheduleService scheduleService) {
+	public ScriptsEdit(ScriptService scriptService, ScheduleService scheduleService, 
+			ScriptVersionService scriptVersionService) {
 		super();
 
 		this.scheduleService = scheduleService;
@@ -47,9 +50,10 @@ public class ScriptsEdit extends Div {
 
 		var dataHierarchicaProvider = new ScriptHierarchicalDataProvider(scriptService);
 		var dataProvider = new ScriptNameDataProvider(scriptService);
-
+		var dataVersionProvider = new ScriptVersionDataProvider(scriptVersionService);
+		
 		right = new ScriptsEditRight(dataProvider, this::save, this::delete, this::run);
-		left = new ScriptsEditLeft(dataHierarchicaProvider, right::setScript, right::addNew);
+		left = new ScriptsEditLeft(dataHierarchicaProvider, right::setScript, right::addNew, dataVersionProvider);
 
 		var split = new SplitLayout(left, right);
 		split.setSplitterPosition(SPLIT_POS);

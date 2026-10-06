@@ -21,6 +21,8 @@ import com.vaadin.flow.component.splitlayout.SplitLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.BackEndDataProvider;
+import com.vaadin.flow.data.provider.DataProvider;
+import com.vaadin.flow.data.provider.Query;
 
 import de.f0rce.ace.AceEditor;
 import lombok.extern.java.Log;
@@ -151,8 +153,10 @@ public class ScriptsEditRight extends VerticalLayout {
 
 		nameField = new TextField(this::validate);
 		formLayout.addFormItem(nameField, NAME);
-
+		var q = new Query<String,String>("");
 		parentField = new ComboBox<String>();
+		
+		
 		parentField.setItems(dataProvider);
 		formLayout.addFormItem(parentField, PARENT);
 
@@ -198,15 +202,17 @@ public class ScriptsEditRight extends VerticalLayout {
 		var ret = new Script();
 		ret.setName(nameField.getValue());
 		ret.setCode(textArea.getValue());
-		parentField.getOptionalValue().ifPresent(parent -> {
-			ret.setParent(parent);
-		});
 		return ret;
 	}
 
 	public void setScript(Script script) {
 		nameField.setValue(script.getName());
 		textArea.setValue(script.getCode());
+		this.parentField.getUI().ifPresent(ui -> {
+			ui.access(() -> {
+				this.parentField.getDataProvider().refreshAll();
+			});
+		});
 		parentField.setValue(script.getParent());
 	}
 
@@ -232,5 +238,5 @@ public class ScriptsEditRight extends VerticalLayout {
 	private void validate(Object event) {
 		saveButton.setEnabled(!nameField.getValue().isEmpty());
 	}
-
+	
 }
